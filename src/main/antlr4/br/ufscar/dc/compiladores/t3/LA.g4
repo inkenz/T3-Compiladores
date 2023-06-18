@@ -96,117 +96,169 @@ IGNORE:
 //
 
 // FORMATO DO PROGRAMA
-programa: declaracoes ALGORITMO corpo FIM_ALGORITMO EOF;
+programa: 
+    declaracoes ALGORITMO corpo FIM_ALGORITMO EOF
+;
 
 // DECLARAÇÕES DE VARIÁVEL
 declaracoes:
-	(decl_local_global)*;
+    (decl_local_global)*
+;
 decl_local_global:
-	 declaracao_local| declaracao_global;
+    declaracao_local| declaracao_global
+;
 declaracao_local:
-	DECLARE variavel
-	| CONSTANTE IDENT DOISPONTOS tipo_basico IGUAL valor_constante
-	| TIPO IDENT DOISPONTOS tipo;
+    DECLARE variavel
+    | CONSTANTE IDENT DOISPONTOS tipo_basico IGUAL valor_constante
+    | TIPO IDENT DOISPONTOS tipo
+;
 declaracao_global:
-	PROCEDIMENTO IDENT ABREPAR (parametros)? FECHAPAR (declaracao_local)* (cmd)* FIM_PROCEDIMENTO
-	| FUNCAO IDENT ABREPAR (parametros)? FECHAPAR DOISPONTOS tipo_estendido (declaracao_local)* (cmd)* FIM_FUNCAO;
+    PROCEDIMENTO IDENT ABREPAR (parametros)? FECHAPAR (declaracao_local)* (cmd)* FIM_PROCEDIMENTO
+    | FUNCAO IDENT ABREPAR (parametros)? FECHAPAR DOISPONTOS tipo_estendido (declaracao_local)* (cmd)* FIM_FUNCAO
+;
 variavel:
-	identificador (VIRGULA identificador)* DOISPONTOS tipo;
+    identificador (VIRGULA identificador)* DOISPONTOS tipo
+;
 identificador:
-	IDENT (PONTO IDENT)* dimensao;
+    IDENT (PONTO IDENT)* dimensao
+;
 dimensao:
-	(ABREBAR exp_aritmetica FECHABAR)*;
+    (ABREBAR exp_aritmetica FECHABAR)*
+;
 corpo:
-	(declaracao_local)* (cmd)*;
+    (declaracao_local)* (cmd)*
+;
 
 // TIPOS
 tipo:
-	registro | tipo_estendido;
+    registro | tipo_estendido
+;
 tipo_basico:
-	LITERAL | INTEIRO | REAL | LOGICO;
+    LITERAL | INTEIRO | REAL | LOGICO
+;
 tipo_estendido:
-	(PONTEIRO)? tipo_basico_ident;
+    (PONTEIRO)? tipo_basico_ident
+;
 tipo_basico_ident:
-	tipo_basico | IDENT;
+    tipo_basico | IDENT
+;
 valor_constante:
-	CADEIA | NUM_INT | NUM_REAL | VERDADEIRO | FALSO;
+    CADEIA | NUM_INT | NUM_REAL | VERDADEIRO | FALSO
+;
 
 
 // ESTRUTURA DOS COMANDOS
 registro:
-	REGISTRO (variavel)* FIM_REGISTRO;
+    REGISTRO (variavel)* FIM_REGISTRO
+;
 cmd:
-	cmdLeia | cmdEscreva | cmdSe | cmdCaso | cmdPara | cmdEnquanto
-   | cmdFaca | cmdAtribuicao | cmdChamada | cmdRetorne;
+    cmdLeia | cmdEscreva | cmdSe | cmdCaso | cmdPara | cmdEnquanto
+   | cmdFaca | cmdAtribuicao | cmdChamada | cmdRetorne
+;
 cmdLeia:
-	LEIA ABREPAR (PONTEIRO)? identificador (VIRGULA (PONTEIRO)? identificador)* FECHAPAR;
+    LEIA ABREPAR (PONTEIRO)? identificador (VIRGULA (PONTEIRO)? identificador)* FECHAPAR
+;
 cmdEscreva:
-	ESCREVA ABREPAR expressao (VIRGULA expressao)* FECHAPAR;
+    ESCREVA ABREPAR expressao (VIRGULA expressao)* FECHAPAR
+;
 cmdSe:
-	SE expressao ENTAO (cmd)* (SENAO (cmd)*)? FIM_SE;
+    SE expressao ENTAO (cmd)* (SENAO (cmd)*)? FIM_SE
+;
 cmdCaso:
-	CASO exp_aritmetica SEJA selecao (SENAO (cmd)*)? FIM_CASO;
+    CASO exp_aritmetica SEJA selecao (SENAO (cmd)*)? FIM_CASO
+;
 cmdPara:
-	PARA IDENT SETA exp_aritmetica ATE exp_aritmetica FACA (cmd)* FIM_PARA;
+    PARA IDENT SETA exp_aritmetica ATE exp_aritmetica FACA (cmd)* FIM_PARA
+;
 cmdEnquanto:
-	ENQUANTO expressao FACA (cmd)* FIM_ENQUANTO;
+    ENQUANTO expressao FACA (cmd)* FIM_ENQUANTO
+;
 cmdFaca:
-	FACA (cmd)* ATE expressao;
+    FACA (cmd)* ATE expressao
+;
 cmdAtribuicao: 
-	(PONTEIRO)? identificador SETA expressao;
+    (PONTEIRO)? identificador SETA expressao
+;
 cmdChamada:
-	IDENT ABREPAR expressao (VIRGULA expressao)* FECHAPAR;
+    IDENT ABREPAR expressao (VIRGULA expressao)* FECHAPAR
+;
 cmdRetorne:
-	RETORNE expressao;
+    RETORNE expressao
+;
 
 // EXPRESSÕES, PARÂMETROS E OPERADORES
 parametro:
-	(VAR)? identificador (VIRGULA identificador)* DOISPONTOS tipo_estendido;
+    (VAR)? identificador (VIRGULA identificador)* DOISPONTOS tipo_estendido
+;
 parametros:
-	parametro (VIRGULA parametro)*;
+    parametro (VIRGULA parametro)*
+;
 selecao:
-	(item_selecao)*;
+    (item_selecao)*
+;
 item_selecao:
-	constantes DOISPONTOS (cmd)*;
+    constantes DOISPONTOS (cmd)*
+;
 constantes:
-	numero_intervalo (VIRGULA numero_intervalo)*;
+    numero_intervalo (VIRGULA numero_intervalo)*
+;
 numero_intervalo:
-	(op_unario)? NUM_INT (SEQ (op_unario)? NUM_INT)?;
+    (op_unario)? NUM_INT (SEQ (op_unario)? NUM_INT)?
+;
 op_unario:
-	SUBTRACAO;
+    SUBTRACAO
+;
 exp_aritmetica:
-	termo (op1 termo)*;
+    termo (op1 termo)*
+;
 termo:
-	fator (op2 fator)*;
+    fator (op2 fator)*
+;
 fator:
-	parcela (op3 parcela)*;
+    parcela (op3 parcela)*
+;
 op1:
-	SOMA | SUBTRACAO;
+    SOMA | SUBTRACAO
+;
 op2:
-	MULTIPLICACAO | DIVISAO;
+    MULTIPLICACAO | DIVISAO
+;
 op3:
-	PORCENTO;
+    PORCENTO
+;
 parcela:
-	(op_unario)? parcela_unario | parcela_nao_unario;
+    (op_unario)? parcela_unario | parcela_nao_unario
+;
 parcela_unario:
-	(PONTEIRO)? identificador
-	| IDENT ABREPAR expressao (VIRGULA expressao)* FECHAPAR
-	| NUM_INT
-	| NUM_REAL
-	| ABREPAR expressao FECHAPAR;
+    (PONTEIRO)? identificador
+    | IDENT ABREPAR expressao (VIRGULA expressao)* FECHAPAR
+    | NUM_INT
+    | NUM_REAL
+    | ABREPAR expressao FECHAPAR
+;
 parcela_nao_unario:
-	ENDERECO identificador | CADEIA;
+    ENDERECO identificador | CADEIA;
 exp_relacional:
-	exp_aritmetica (op_relacional exp_aritmetica)?;
+    exp_aritmetica (op_relacional exp_aritmetica)?
+;
 op_relacional:
-	IGUAL | DIFERENTE | MAIORIGUAL | MENORIGUAL | MAIOR | MENOR;
+    IGUAL | DIFERENTE | MAIORIGUAL | MENORIGUAL | MAIOR | MENOR
+;
 expressao:
-	termo_logico (op_logico_1 termo_logico)*;
+    termo_logico (op_logico_1 termo_logico)*
+;
 termo_logico:
-	fator_logico (op_logico_2 fator_logico)*;
+    fator_logico (op_logico_2 fator_logico)*
+;
 fator_logico:
-	(NAO)? parcela_logica;
+    (NAO)? parcela_logica
+;
 parcela_logica:
-	(VERDADEIRO | FALSO) | exp_relacional;
-op_logico_1: OU;
-op_logico_2: E;   
+    (VERDADEIRO | FALSO) | exp_relacional
+;
+op_logico_1: 
+    OU
+;
+op_logico_2: 
+    E
+;   
