@@ -4,20 +4,43 @@ import java.util.HashMap;
 
 
 public class TabelaDeSimbolos {
-    private HashMap<String, EntradaTabelaDeSimbolos> tabelaDeSimbolos;
+    public enum Tipo {
+        INTEIRO,
+        REAL,
+        LITERAL,
+        LOGICO,
+        REGISTRO,
+        PONTEIRO,
+        FUNCAO,
+        PROCEDIMENTO,
+        INVALIDO
+    }
+    
+    class EntradaTabelaDeSimbolos {
+        Tipo tipo;
+       
+        private EntradaTabelaDeSimbolos(Tipo tipo) {
+            this.tipo = tipo;
+        }
+    }
+    
+    private final HashMap<String, EntradaTabelaDeSimbolos> tabela;
     
     public TabelaDeSimbolos(){
-        tabelaDeSimbolos = new HashMap<>();
+        tabela = new HashMap<>();
     }
     
-    public void inserir(String nome, double valor){
-        EntradaTabelaDeSimbolos etds = new EntradaTabelaDeSimbolos();
-        etds.nome = nome;
-        etds.valor = valor;
-        tabelaDeSimbolos.put(nome, etds);
+    public void inserir(String nome, Tipo tipo){
+        EntradaTabelaDeSimbolos etds = new EntradaTabelaDeSimbolos(tipo);
+        
+        tabela.put(nome,etds);
     }
     
-    public EntradaTabelaDeSimbolos verificar(String nome){
-        return tabelaDeSimbolos.get(nome);
+    public boolean existe(String nome) {
+        return tabela.containsKey(nome);
     }
+    
+    public Tipo verificar(String nome) {
+        return tabela.get(nome).tipo;
+    }   
 }

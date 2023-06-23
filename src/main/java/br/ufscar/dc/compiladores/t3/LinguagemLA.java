@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.FileWriter;
 
+import br.ufscar.dc.compiladores.t3.LAParser.ProgramaContext;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -58,14 +59,25 @@ public class LinguagemLA
 
                 parser.programa();
             }
+     
+            cs = CharStreams.fromFileName(args[0]);
+            lex = new LALexer(cs);
+            CommonTokenStream tokens = new CommonTokenStream(lex);
+            LAParser parser = new LAParser(tokens);
+
+            parser.removeErrorListeners();
+
+            ProgramaContext arvore = parser.programa();
+            LinguagemLAVisitor as = new LinguagemLAVisitor();
+
+            as.visitPrograma(arvore);
+            LinguagemLAUtils.errosSemanticos.forEach((s) -> pw.println(s));
 
             pw.println("Fim da compilacao");
             pw.close();
 
-
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
     }
 }
