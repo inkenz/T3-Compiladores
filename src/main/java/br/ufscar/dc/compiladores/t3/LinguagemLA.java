@@ -59,7 +59,7 @@ public class LinguagemLA
 
                 parser.programa();
             }
-     
+            
             cs = CharStreams.fromFileName(args[0]);
             lex = new LALexer(cs);
             CommonTokenStream tokens = new CommonTokenStream(lex);
@@ -72,6 +72,7 @@ public class LinguagemLA
 
             as.visitPrograma(arvore);
             LinguagemLAUtils.errosSemanticos.forEach((s) -> pw.println(s));
+            
 
             pw.println("Fim da compilacao");
             pw.close();

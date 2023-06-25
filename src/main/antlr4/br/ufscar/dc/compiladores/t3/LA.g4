@@ -137,11 +137,9 @@ tipo_basico:
     LITERAL | INTEIRO | REAL | LOGICO
 ;
 tipo_estendido:
-    (PONTEIRO)? tipo_basico_ident
+    (PONTEIRO)? (tipo_basico | IDENT)
 ;
-tipo_basico_ident:
-    tipo_basico | IDENT
-;
+
 valor_constante:
     CADEIA | NUM_INT | NUM_REAL | VERDADEIRO | FALSO
 ;
