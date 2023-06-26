@@ -15,45 +15,12 @@ public class LinguagemLAVisitor extends LABaseVisitor<Void>{
     }
 
     @Override
-    public Void visitDeclaracao_global(LAParser.Declaracao_globalContext ctx)
-    {
-        TabelaDeSimbolos tabelaAtual = escopos.escopoAtual();
-
-        if (ctx.PROCEDIMENTO() != null){
-            String nome = ctx.PROCEDIMENTO().getText();
-
-            // TODO: Colocar erro semântico caso o nome do procedimento já exista.
-            if (tabelaAtual.existe(nome)){
-                
-            }
-        }
-        else if (ctx.FUNCAO() != null){
-            String nome = ctx.FUNCAO().getText();
-            
-            // TODO: Colocar erro semântico caso o nome do procedimento já exista.
-            if (tabelaAtual.existe(nome)){
-            }
-        }
-
-        return super.visitDeclaracao_global(ctx);
-    }
-
-    @Override
     public Void visitDeclaracao_local(LAParser.Declaracao_localContext ctx)
     {
         TabelaDeSimbolos tabela = escopos.escopoAtual();
 
         if (ctx.DECLARE() != null){
-            String nome = ctx.DECLARE().getText();
-
-            // Já existe a variável.
-            if (tabela.existe(nome)){
-                System.out.println("Variavel " + nome + "ja esta declarada");
-            }
-            else{
-                Tipo tipo = LinguagemLAUtils.verificarTipo(tabela, ctx.variavel());
-                
-            }
+            verificarTipo(tabela, ctx.variavel());       
         }
         return super.visitDeclaracao_local(ctx);
     }
@@ -63,8 +30,7 @@ public class LinguagemLAVisitor extends LABaseVisitor<Void>{
         Tipo tipoExp = verificarTipo(escopos, ctx.expressao());
         boolean error = false;
         String nomeVar = ctx.identificador().getText();
-        //System.out.print(ctx.getText() +"   ");
-        //System.out.print(tipoExp+"\n");
+        
         if (tipoExp != Tipo.INVALIDO) {
             for(TabelaDeSimbolos escopo : escopos.recuperarTodosEscopos()){
                 if (escopo.existe(nomeVar))  {
@@ -81,8 +47,10 @@ public class LinguagemLAVisitor extends LABaseVisitor<Void>{
             error = true;
         }
 
-        if(error)
+        if(error){
+            System.out.print(ctx.getText()+" "+tipoExp+"\n");
             adicionarErroSemantico(ctx.identificador().start, "atribuicao nao compativel para " + nomeVar );
+        }
 
         return super.visitCmdAtribuicao(ctx);
     }

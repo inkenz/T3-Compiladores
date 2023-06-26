@@ -40,7 +40,9 @@ public class LinguagemLAUtils {
             Tipo aux = verificarTipo(escopos, ta);
             if (ret == null) {
                 ret = aux;
-            } else if (ret != aux && aux != Tipo.INVALIDO) {
+            } if(ret == Tipo.LOGICO){
+                return Tipo.LOGICO;
+            }else if (ret != aux && aux != Tipo.INVALIDO) {
  
                 ret = Tipo.INVALIDO;
             }
@@ -56,7 +58,9 @@ public class LinguagemLAUtils {
             //System.out.print(ctx.getText() + " 1 " + aux +"    \n");
             if (ret == null) {
                 ret = aux;
-            } else if (ret != aux && aux != Tipo.INVALIDO) {
+            } if(ret == Tipo.LOGICO){
+                return Tipo.LOGICO;
+            }else if (ret != aux && aux != Tipo.INVALIDO) {
                 ret = Tipo.INVALIDO;
             }
         }
@@ -66,8 +70,8 @@ public class LinguagemLAUtils {
     }
     
     public static Tipo verificarTipo(Escopo escopos, Fator_logicoContext ctx) {
-        Tipo aux = verificarTipo(escopos, ctx.parcela_logica());
-        //System.out.print(ctx.getText() + " 2 " + aux +"    \n");
+        if(ctx.NAO() != null) return Tipo.LOGICO;
+        
         return verificarTipo(escopos, ctx.parcela_logica());
     }
     
@@ -82,18 +86,21 @@ public class LinguagemLAUtils {
     
     public static Tipo verificarTipo(Escopo escopos, Exp_relacionalContext ctx) {
         Tipo ret = null;
+        
+        if(ctx.op_relacional() != null) return Tipo.LOGICO;
+        
         for (Exp_aritmeticaContext ta : ctx.exp_aritmetica()) {
             Tipo aux = verificarTipo(escopos, ta);
             //System.out.print(ctx.getText() + " 3 " + aux +"    \n");
             if (ret == null) {
                 ret = aux;
             } else if (ret != aux && aux != Tipo.INVALIDO) {
-                System.out.print(ctx.getText() +" 1  \n");
+                
                 ret = Tipo.INVALIDO;
             }
         }
 
-        //SemanticoUtils.adicionarErroSemantico(ctx.start, "8" +ctx.getText() + ret);
+        
         return ret;
     }
     
@@ -105,7 +112,6 @@ public class LinguagemLAUtils {
             if (ret == null) {
                 ret = aux;
             } else if (ret != aux && aux != Tipo.INVALIDO) {
-                System.out.print(ctx.getText() +"   2\n");
                 ret = Tipo.INVALIDO;
             }
         }
@@ -262,8 +268,9 @@ public class LinguagemLAUtils {
 
         ctx.identificador().forEach(ident -> {
             if (tabela.existe(ident.getText())){
+                System.out.print(ctx.getText());
                 adicionarErroSemantico(
-                    ctx.tipo().start,
+                    ident.start,
                     "identificador " + ident.getText() + " ja declarado anteriormente"
                     );
             }
