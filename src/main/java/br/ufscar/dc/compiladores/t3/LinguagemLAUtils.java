@@ -252,14 +252,13 @@ public class LinguagemLAUtils {
         return tipo;
     }
 
+    
+
     public static Tipo verificarTipo(TabelaDeSimbolos tabela,TipoContext ctx)
     {
-        // if (ctx.tipo_variavel() != null){
-            return verificarTipo(tabela, ctx.tipo_estendido());
-        // }
-        // else{
-        //     return verificarTipo(tabela, ctx.registro());
-        // }
+       if(ctx.tipo_estendido() != null) return verificarTipo(tabela, ctx.tipo_estendido());
+       
+       return Tipo.REGISTRO;
     }
 
     public static Tipo verificarTipo(TabelaDeSimbolos tabela, VariavelContext ctx)
@@ -268,7 +267,7 @@ public class LinguagemLAUtils {
 
         ctx.identificador().forEach(ident -> {
             if (tabela.existe(ident.getText())){
-                System.out.print(ctx.getText());
+                System.out.println("variavel " + ident.getText() + " já foi declarada\n");
                 adicionarErroSemantico(
                     ident.start,
                     "identificador " + ident.getText() + " ja declarado anteriormente"
@@ -276,6 +275,15 @@ public class LinguagemLAUtils {
             }
             else{
                 tabela.inserir(ident.getText(), tipo);
+                if(tipo == Tipo.REGISTRO){
+                    Tipo tipoRegistro = verificarTipo(tabela, ctx.tipo().registro().variavel().tipo());
+
+                    ctx.tipo().registro().variavel().identificador().forEach(identRegistro -> {
+                        String registro = ident.getText() + '.' + identRegistro.getText();
+                        System.out.println(registro + "\n");
+                        tabela.inserir(registro, tipoRegistro);
+                    });
+                }
             }
         });
 

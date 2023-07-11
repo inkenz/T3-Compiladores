@@ -19,10 +19,26 @@ public class LinguagemLAVisitor extends LABaseVisitor<Void>{
     {
         TabelaDeSimbolos tabela = escopos.escopoAtual();
 
+        System.out.println("LOCAL\n");
+
         if (ctx.DECLARE() != null){
             verificarTipo(tabela, ctx.variavel());       
         }
         return super.visitDeclaracao_local(ctx);
+    }
+
+    @Override
+    public Void visitRegistro(LAParser.RegistroContext ctx){
+        TabelaDeSimbolos tabela = escopos.escopoAtual();
+
+        System.out.println("REGISTRO\n");
+
+        Tipo tipoSla = verificarTipo(tabela, ctx.variavel());
+        System.out.println("Aka -> " + tipoSla);
+
+        //System.out.println("Aka -> " + ctx.variavel().get(0).getText());
+
+        return super.visitRegistro(ctx);
     }
 
     @Override
@@ -48,15 +64,28 @@ public class LinguagemLAVisitor extends LABaseVisitor<Void>{
         }
 
         if(error){
-            System.out.print(ctx.getText()+" "+tipoExp+"\n");
-            adicionarErroSemantico(ctx.identificador().start, "atribuicao nao compativel para " + nomeVar );
+            if(ctx.PONTEIRO() != null)
+                adicionarErroSemantico(ctx.identificador().start, "atribuicao nao compativel para ^" + nomeVar );
+            else
+                adicionarErroSemantico(ctx.identificador().start, "atribuicao nao compativel para " + nomeVar );
         }
 
         return super.visitCmdAtribuicao(ctx);
     }
 
-    
-    
+    /*@Override
+    public Void visitTipo_estendido(LAParser.Tipo_estendidoContext ctx){
+        if(ctx.PONTEIRO() != null){
+            String nome = ctx.PONTEIRO().getText();
+            System.out.println("AQUI -> " + nome);
+            for(TabelaDeSimbolos escopo : escopo.recuperarTodosEscopos()){
+                if(escopo.existe)
+            }
+        }
+
+
+        return super.visitTipo_estendido(ctx);
+    }*/
     
     
     @Override

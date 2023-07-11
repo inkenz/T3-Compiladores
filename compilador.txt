@@ -1,0 +1,1 @@
+sudo java -jar target/linguagem-la-1.0-SNAPSHOT-jar-with-dependencies.jar /home/aluno/compiladores/compilador/entrada.txt test

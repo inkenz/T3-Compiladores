@@ -147,7 +147,7 @@ valor_constante:
 
 // ESTRUTURA DOS COMANDOS
 registro:
-    REGISTRO (variavel)* FIM_REGISTRO
+    REGISTRO (variavel) FIM_REGISTRO
 ;
 cmd:
     cmdLeia | cmdEscreva | cmdSe | cmdCaso | cmdPara | cmdEnquanto
