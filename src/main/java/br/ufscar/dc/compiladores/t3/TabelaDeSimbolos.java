@@ -9,8 +9,8 @@ public class TabelaDeSimbolos {
         REAL,
         LITERAL,
         LOGICO,
-        REGISTRO,
         PONTEIRO,
+        REGISTRO,
         FUNCAO,
         PROCEDIMENTO,
         INVALIDO

@@ -55,7 +55,6 @@ public class LinguagemLAUtils {
         Tipo ret = null;
         for (Fator_logicoContext ta : ctx.fator_logico()) {
             Tipo aux = verificarTipo(escopos, ta);
-            //System.out.print(ctx.getText() + " 1 " + aux +"    \n");
             if (ret == null) {
                 ret = aux;
             } if(ret == Tipo.LOGICO){
@@ -64,8 +63,6 @@ public class LinguagemLAUtils {
                 ret = Tipo.INVALIDO;
             }
         }
-
-        //SemanticoUtils.adicionarErroSemantico(ctx.start, "8" +ctx.getText() + ret);
         return ret;
     }
     
@@ -76,10 +73,7 @@ public class LinguagemLAUtils {
     }
     
     public static Tipo verificarTipo(Escopo escopos, Parcela_logicaContext ctx) {
-        Tipo ret = null;
-        
         if(ctx.VERDADEIRO() != null || ctx.FALSO() != null) return Tipo.LOGICO;
-        
         
         return verificarTipo(escopos, ctx.exp_relacional());
     }
@@ -91,7 +85,6 @@ public class LinguagemLAUtils {
         
         for (Exp_aritmeticaContext ta : ctx.exp_aritmetica()) {
             Tipo aux = verificarTipo(escopos, ta);
-            //System.out.print(ctx.getText() + " 3 " + aux +"    \n");
             if (ret == null) {
                 ret = aux;
             } else if (ret != aux && aux != Tipo.INVALIDO) {
@@ -100,7 +93,6 @@ public class LinguagemLAUtils {
             }
         }
 
-        
         return ret;
     }
     
@@ -116,7 +108,6 @@ public class LinguagemLAUtils {
             }
         }
 
-        //SemanticoUtils.adicionarErroSemantico(ctx.start, "8" +ctx.getText() + ret);
         return ret;
     }
     
@@ -134,7 +125,6 @@ public class LinguagemLAUtils {
             }
         }
 
-        //SemanticoUtils.adicionarErroSemantico(ctx.start, "8" +ctx.getText() + ret);
         return ret;
     }
     
@@ -148,8 +138,6 @@ public class LinguagemLAUtils {
                 ret = Tipo.INVALIDO;
             }
         }
-
-        //SemanticoUtils.adicionarErroSemantico(ctx.start, "8" +ctx.getText() + ret);
         return ret;
     }
     
@@ -227,13 +215,10 @@ public class LinguagemLAUtils {
     {
         Tipo tipo;
 
-        // Caso haja o simbolo de ponteiro antes é declarado como ponteiro.
+        // Se possui o simbolo de ponteiro, então é um ponteiro
         if (ctx.PONTEIRO() != null){
             return Tipo.PONTEIRO;
         }
-
-        // Caso seja um identificador, é um registro,
-        // então é necessário ver se o tipo de registro existe.
         else if (ctx.IDENT() != null) {
             if (!tabela.existe(ctx.IDENT().getText())){
                 return Tipo.INVALIDO;
@@ -242,8 +227,6 @@ public class LinguagemLAUtils {
                 tipo = Tipo.REGISTRO;
             }
         }
-        
-        // É uma variável de tipo básico.
         else {
             tipo = verificarTipo(tabela, ctx.tipo_basico());
         }
@@ -254,12 +237,7 @@ public class LinguagemLAUtils {
 
     public static Tipo verificarTipo(TabelaDeSimbolos tabela,TipoContext ctx)
     {
-        // if (ctx.tipo_variavel() != null){
-            return verificarTipo(tabela, ctx.tipo_estendido());
-        // }
-        // else{
-        //     return verificarTipo(tabela, ctx.registro());
-        // }
+        return verificarTipo(tabela, ctx.tipo_estendido());   
     }
 
     public static Tipo verificarTipo(TabelaDeSimbolos tabela, VariavelContext ctx)
